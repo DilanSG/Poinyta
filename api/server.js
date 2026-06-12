@@ -107,6 +107,11 @@ app.delete("/api/expense/:id", auth, (req, res) => {
   res.json({ ok: true });
 });
 
+// Health check — sin auth, para uptime monitors (evita el sleep de Render free)
+app.get("/api/health", (req, res) => {
+  res.json({ ok: true, uptime: process.uptime() });
+});
+
 // Reporte de feedback desde la app
 app.post("/api/report", auth, async (req, res) => {
   const { description, config } = req.body;
