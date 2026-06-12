@@ -23,6 +23,10 @@ if (SMTP_USER && SMTP_PASS) {
     port: SMTP_PORT,
     secure: SMTP_PORT === 465,
     auth: { user: SMTP_USER, pass: SMTP_PASS },
+    connectionTimeout: 20000,
+    greetingTimeout: 15000,
+    socketTimeout: 30000,
+    tls: { rejectUnauthorized: true },
   });
 }
 
@@ -131,8 +135,9 @@ app.post("/api/report", auth, async (req, res) => {
     });
     res.json({ ok: true });
   } catch (err) {
-    console.error("Error enviando reporte:", err);
-    res.status(500).json({ error: "Error al enviar el correo" });
+    const msg = err instanceof Error ? err.message : "Error desconocido";
+    console.error("Error enviando reporte:", msg);
+    res.status(500).json({ error: msg });
   }
 });
 
