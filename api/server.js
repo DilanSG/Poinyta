@@ -29,6 +29,7 @@ if (SMTP_USER && SMTP_PASS) {
     greetingTimeout: 15000,
     socketTimeout: 30000,
     tls: { rejectUnauthorized: true },
+    lookup: (hostname, options, cb) => dns.lookup(hostname, { ...options, family: 4 }, cb),
   });
 }
 
