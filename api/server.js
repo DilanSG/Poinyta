@@ -3,6 +3,7 @@ const fs = require("fs");
 const path = require("path");
 const crypto = require("crypto");
 const nodemailer = require("nodemailer");
+require("dotenv").config();
 const app = express();
 const PORT = process.env.PORT || 3001;
 const API_KEY = process.env.POINYTA_API_KEY;
@@ -137,4 +138,5 @@ app.post("/api/report", auth, async (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`Poinyta sync server running on port ${PORT}`);
+  console.log(`SMTP ${transporter ? "configurado" : "NO CONFIGURADO"} — user=${SMTP_USER ? "✓" : "✗"} pass=${SMTP_PASS ? "✓" : "✗"}`);
 });
