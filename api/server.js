@@ -18,20 +18,37 @@ const SMTP_USER = process.env.SMTP_USER;
 const SMTP_PASS = process.env.SMTP_PASS;
 const REPORT_TO = process.env.REPORT_TO || "nalidess2002@gmail.com";
 
-let transporter = null;
-if (SMTP_USER && SMTP_PASS) {
-  transporter = nodemailer.createTransport({
-    host: SMTP_HOST,
+async function createTransporter() {
+  if (!SMTP_USER || !SMTP_PASS) return null;
+  let resolvedHost = SMTP_HOST;
+  try {
+    const addresses = await dns.promises.resolve4(SMTP_HOST);
+    if (addresses.length > 0) resolvedHost = addresses[0];
+    console.log(`SMTP resolved ${SMTP_HOST} → ${resolvedHost} (IPv4)`);
+  } catch (e) {
+    console.warn(`SMTP DNS resolution failed, using hostname: ${e.message}`);
+  }
+  return nodemailer.createTransport({
+    host: resolvedHost,
     port: SMTP_PORT,
     secure: SMTP_PORT === 465,
     auth: { user: SMTP_USER, pass: SMTP_PASS },
     connectionTimeout: 20000,
     greetingTimeout: 15000,
     socketTimeout: 30000,
-    tls: { rejectUnauthorized: true },
-    lookup: (hostname, options, cb) => dns.lookup(hostname, { ...options, family: 4 }, cb),
+    tls: { rejectUnauthorized: true, servername: SMTP_HOST },
   });
 }
+
+let transporter = null;
+
+// Inicializar async y arrancar servidor
+createTransporter().then((t) => {
+  transporter = t;
+  console.log(`SMTP ${transporter ? "configurado" : "NO CONFIGURADO"} — user=${SMTP_USER ? "✓" : "✗"} pass=${SMTP_PASS ? "✓" : "✗"}`);
+  const relevantVars = ["SMTP_USER", "SMTP_PASS", "POINYTA_API_KEY", "REPORT_TO", "SMTP_HOST", "SMTP_PORT"];
+  console.log("Env vars check:", relevantVars.map(v => `${v}=${process.env[v] ? "SET" : "MISSING"}`).join(", "));
+});
 
 if (!API_KEY) {
   console.error("ERROR: Set the POINYTA_API_KEY environment variable before starting.");
@@ -146,6 +163,11 @@ app.post("/api/report", auth, async (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`Poinyta sync server running on port ${PORT}`);
+});
+
+// Inicializar transporter async (resolver IPv4 de Gmail)
+createTransporter().then((t) => {
+  transporter = t;
   console.log(`SMTP ${transporter ? "configurado" : "NO CONFIGURADO"} — user=${SMTP_USER ? "✓" : "✗"} pass=${SMTP_PASS ? "✓" : "✗"}`);
   const relevantVars = ["SMTP_USER", "SMTP_PASS", "POINYTA_API_KEY", "REPORT_TO", "SMTP_HOST", "SMTP_PORT"];
   console.log("Env vars check:", relevantVars.map(v => `${v}=${process.env[v] ? "SET" : "MISSING"}`).join(", "));
