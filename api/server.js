@@ -2,6 +2,8 @@ const express = require("express");
 const fs = require("fs");
 const path = require("path");
 const crypto = require("crypto");
+const dns = require("dns");
+dns.setDefaultResultOrder("ipv4first");
 const nodemailer = require("nodemailer");
 require("dotenv").config();
 const app = express();
