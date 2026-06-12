@@ -139,4 +139,6 @@ app.post("/api/report", auth, async (req, res) => {
 app.listen(PORT, () => {
   console.log(`Poinyta sync server running on port ${PORT}`);
   console.log(`SMTP ${transporter ? "configurado" : "NO CONFIGURADO"} — user=${SMTP_USER ? "✓" : "✗"} pass=${SMTP_PASS ? "✓" : "✗"}`);
+  const relevantVars = ["SMTP_USER", "SMTP_PASS", "POINYTA_API_KEY", "REPORT_TO", "SMTP_HOST", "SMTP_PORT"];
+  console.log("Env vars check:", relevantVars.map(v => `${v}=${process.env[v] ? "SET" : "MISSING"}`).join(", "));
 });
