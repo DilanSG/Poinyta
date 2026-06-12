@@ -1,0 +1,57 @@
+import { createContext } from "react";
+import type { ThemeColors } from "./colors";
+import type { ButtonColorPreset } from "./presets/button-colors";
+import type { ChartColorPreset } from "./presets/chart-colors";
+import type { MovementLayerPreset } from "./presets/movement-layers";
+import type { GlowPreset } from "./presets/glow-presets";
+import type { ThemeVariant } from "./presets/themes";
+import type { BackgroundVariant } from "./presets/themes";
+
+export type ThemeMode = "light" | "dark" | "system";
+
+export type ThemeContextValue = {
+  colors: ThemeColors;
+  mode: ThemeMode;
+  isDark: boolean;
+  setMode: (mode: ThemeMode) => Promise<void>;
+  activeVariantId: string;
+  purchasedIds: Set<string>;
+  equipTheme: (id: string) => Promise<void>;
+  purchaseTheme: (id: string, cost: number) => Promise<{ success: boolean; reason?: string }>;
+  refreshPurchased: () => Promise<void>;
+  activeBackgroundId: string;
+  purchasedBackgroundIds: Set<string>;
+  equipBackground: (id: string) => Promise<void>;
+  purchaseBackground: (id: string, cost: number) => Promise<{ success: boolean; reason?: string }>;
+  refreshPurchasedBackgrounds: () => Promise<void>;
+  activeButtonColorId: string;
+  purchasedButtonColorIds: Set<string>;
+  setButtonColor: (id: string) => Promise<void>;
+  purchaseButtonColor: (id: string, cost: number) => Promise<{ success: boolean; reason?: string }>;
+  claimFreePoints: () => Promise<void>;
+  freePointsClaimed: boolean;
+  refreshPurchasedButtonColors: () => Promise<void>;
+  allButtonColors: ButtonColorPreset[];
+  activeChartColorId: string;
+  purchasedChartColorIds: Set<string>;
+  setChartColor: (id: string) => Promise<void>;
+  purchaseChartColor: (id: string, cost: number) => Promise<{ success: boolean; reason?: string }>;
+  refreshPurchasedChartColors: () => Promise<void>;
+  allChartColors: ChartColorPreset[];
+  movementLayerId: string;
+  purchasedMovementLayerIds: Set<string>;
+  setMovementLayer: (id: string) => Promise<void>;
+  purchaseMovementLayer: (id: string, cost: number) => Promise<{ success: boolean; reason?: string }>;
+  refreshPurchasedMovementLayers: () => Promise<void>;
+  allMovementLayers: MovementLayerPreset[];
+  glowId: string;
+  glowIntensity: number;
+  purchasedGlowIds: Set<string>;
+  setGlow: (id: string) => Promise<void>;
+  setGlowIntensity: (value: number) => Promise<void>;
+  purchaseGlow: (id: string, cost: number) => Promise<{ success: boolean; reason?: string }>;
+  refreshPurchasedGlow: () => Promise<void>;
+  allGlowPresets: GlowPreset[];
+};
+
+export const ThemeContext = createContext<ThemeContextValue>(null as unknown as ThemeContextValue);

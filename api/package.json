@@ -1,0 +1,13 @@
+{
+  "name": "poinyta-sync-server",
+  "version": "1.0.0",
+  "description": "Puente entre n8n y la app Poinyta",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "nodemailer": "^8.0.11"
+  }
+}

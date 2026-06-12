@@ -1,0 +1,30 @@
+declare module 'react-native-svg' {
+  import * as React from 'react';
+  import { ViewProps } from 'react-native';
+  export const Svg: any;
+  export const Path: any;
+  export const Circle: any;
+  export const Rect: any;
+  export const Ellipse: any;
+  export const Line: any;
+  export const Polygon: any;
+  export const Polyline: any;
+  export const G: any;
+  export const Text: any;
+  export const TSpan: any;
+  export const TextPath: any;
+  export const Use: any;
+  export const Image: any;
+  export const Symbol: any;
+  export const Defs: any;
+  export const LinearGradient: any;
+  export const RadialGradient: any;
+  export const Stop: any;
+  export const ClipPath: any;
+  export const Pattern: any;
+  export const Mask: any;
+  export const Marker: any;
+  export const ForeignObject: any;
+  const _default: any;
+  export default _default;
+}
